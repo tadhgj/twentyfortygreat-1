@@ -5,15 +5,32 @@
 }
 
 .ai-button, #feedback-container {
-  font-size: xx-large;
+  font-size: x-large;
+}
+
+#runs-container {
+	float: left;
+
+}
+
+#run-count {
+	width: 50px;
 }
 
 #run-button-container {
-  float: right;
+  float: left;
+}
+
+#run-button , #hint-button {
+	width: 120px;
 }
 
 #hint-button-container, #feedback-container {
   float: left;
+  display: none;
+}
+#hint-button-container {
+  clear: both;
 }
 
 #feedback-container {

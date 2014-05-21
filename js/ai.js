@@ -1,3 +1,12 @@
+function moveName(move) {
+ return {
+    0: 'up',
+    1: 'right',
+    2: 'down',
+    3: 'left'
+  }[move];
+}
+
 function getBestMove(grid, runs, debug) {
 		var bestScore = 0; 
 		var bestMove = -1;
@@ -12,7 +21,7 @@ function getBestMove(grid, runs, debug) {
 			}
 			
 			if (debug) {
-				console.log('Move ' + i + " - " + score);
+				console.log('Move ' + moveName(i) + ": Extra score - " + score);
 			}
 		}
 		if(!grid.movesAvailable()) console.log('bug2');		
@@ -79,6 +88,8 @@ function moveAndAddRandomTiles(grid, direction) {
 }
 
 // performs a search and returns the best move
-function AI_getBest(grid) {
-    return getBestMove(grid, 100);  
+function AI_getBest(grid, debug) {
+	var runs = document.getElementById('run-count').value;
+    return getBestMove(grid, runs, debug);  
 }
+

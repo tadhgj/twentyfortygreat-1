@@ -9,7 +9,7 @@ function GameManager(size, InputManager, Actuator) {
   this.inputManager.on("restart", this.restart.bind(this));
 
   this.inputManager.on('think', function() {
-    var best = AI_getBest(this.grid);
+    var best = AI_getBest(this.grid, true);
     this.actuator.showHint(best.move);
   }.bind(this));
 
@@ -17,7 +17,7 @@ function GameManager(size, InputManager, Actuator) {
   this.inputManager.on('run', function() {
     if (this.running) {
       this.running = false;
-      this.actuator.setRunButton('Auto-run');
+      this.actuator.setRunButton('Run AI');
     } else {
       this.running = true;
       this.run()
@@ -84,7 +84,7 @@ GameManager.prototype.move = function(direction) {
 
 // moves continuously until game is over
 GameManager.prototype.run = function() {
-  var best = AI_getBest(this.grid);
+  var best = AI_getBest(this.grid, false);
   this.move(best.move);
   var timeout = animationDelay;
   if (this.running && !this.over && !this.won) {
