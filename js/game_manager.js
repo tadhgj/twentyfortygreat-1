@@ -9,7 +9,7 @@ function GameManager(size, InputManager, Actuator) {
   this.inputManager.on("restart", this.restart.bind(this));
 
   this.inputManager.on('think', function() {
-    var best = this.ai.getBest();
+    var best = AI_getBest(this.grid);
     this.actuator.showHint(best.move);
   }.bind(this));
 
@@ -41,8 +41,6 @@ GameManager.prototype.setup = function () {
   this.grid         = new Grid(this.size);
   this.grid.addStartTiles();
 
-  this.ai           = new AI(this.grid);
-
   this.score        = 0;
   this.over         = false;
   this.won          = false;
@@ -71,7 +69,8 @@ GameManager.prototype.move = function(direction) {
       this.grid.computerMove();
     }
   } else {
-    this.won = true;
+//    this.won = true;
+// don't stop after getting to 2048
   }
 
   //console.log(this.grid.valueSum());
@@ -85,7 +84,7 @@ GameManager.prototype.move = function(direction) {
 
 // moves continuously until game is over
 GameManager.prototype.run = function() {
-  var best = this.ai.getBest();
+  var best = AI_getBest(this.grid);
   this.move(best.move);
   var timeout = animationDelay;
   if (this.running && !this.over && !this.won) {
