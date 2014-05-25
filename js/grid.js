@@ -30,12 +30,32 @@ Grid.prototype.build = function () {
 
 
 // Find the first available random position
+// Note: Optimized by Ronen
 Grid.prototype.randomAvailableCell = function () {
-  var cells = this.availableCells();
-
-  if (cells.length) {
-    return cells[Math.floor(Math.random() * cells.length)];
+  var count = 0;
+  for (var x = 0; x < this.size; x++) {
+    for (var y = 0; y < this.size; y++) {
+      if (!this.cells[x][y]) {
+		count++;
+	  }	
+    }
   }
+  if (count==0) return null; // shouldn't happen
+
+  var choice = Math.floor(Math.random() * count);
+  count = 0;	
+  for (var x = 0; x < this.size; x++) {
+    for (var y = 0; y < this.size; y++) {
+	  if (this.cells[x][y]) continue;
+
+	  if (count == choice) return {x:x, y:y};
+	  
+	  count++;	  
+    }
+  }
+  
+  console.log("should not be here");
+
 };
 
 Grid.prototype.availableCells = function () {
@@ -62,9 +82,17 @@ Grid.prototype.eachCell = function (callback) {
 };
 
 // Check if there are any cells available
+// Note: Optimized by Ronen
 Grid.prototype.cellsAvailable = function () {
-  return !!this.availableCells().length;
+  for (var x = 0; x < this.size; x++) {
+    for (var y = 0; y < this.size; y++) {
+      if (!this.cells[x][y]) return true;
+    }
+  }
+  return false;
 };
+
+
 
 // Check if the specified cell is taken
 Grid.prototype.cellAvailable = function (cell) {
@@ -161,6 +189,7 @@ Grid.prototype.getVector = function (direction) {
 
 // Move tiles on the grid in the specified direction
 // returns true if move was successful
+// Note: Optimized by Ronen
 Grid.prototype.move = function (direction) {
   // 0: up, 1: right, 2:down, 3: left
   var self = this;
@@ -177,8 +206,11 @@ Grid.prototype.move = function (direction) {
   this.prepareTiles();
 
   // Traverse the grid in the right direction and move tiles
-  traversals.x.forEach(function (x) {
-    traversals.y.forEach(function (y) {
+	for (var ix=0;ix<4;ix++) {
+		for (var iy=0;iy<4;iy++) {
+			var x = traversals.x[ix];
+			var y = traversals.y[iy];
+
       cell = self.indexes[x][y];
       tile = self.cellContent(cell);
 
@@ -221,8 +253,8 @@ Grid.prototype.move = function (direction) {
           moved = true; // The tile moved from its original cell!
         }
       }
-    });
-  });
+    }
+  }
 
   //console.log('returning, playerturn is', self.playerTurn);
   //if (!moved) {
@@ -257,7 +289,6 @@ Grid.prototype.buildTraversals = function (vector) {
 
 Grid.prototype.findFarthestPosition = function (cell, vector) {
   var previous;
-
   // Progress towards the vector direction until an obstacle is found
   do {
     previous = cell;
