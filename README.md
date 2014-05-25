@@ -12,5 +12,5 @@ The success of the AI is surprising as a random-walk game finishes quite quickly
 
 I've also created a version in C++ using the very clever and highly optimized version by nneonneo. You can find it [here](https://github.com/ronzil/2048-ai-cpp)
 
-For a detailed discussion, [check out my answer on stackoverflow](http://stackoverflow.com/a/22389702/1056032).
+For a detailed discussion, [check out my answer on stackoverflow](http://stackoverflow.com/a/23853848/632039).
 
