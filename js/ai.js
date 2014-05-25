@@ -7,17 +7,22 @@ function moveName(move) {
   }[move];
 }
 
+var	global_max_score;
+var global_max_score_moves;
+
 function getBestMove(grid, runs, debug) {
 		var bestScore = 0; 
 		var bestMove = -1;
 
 		for (var i=0;i<4;i++) {
 			// score move position
-			var score = multiRandomRun(grid, i, runs);
+			var res = multiRandomRun(grid, i, runs);
+			var score = res.score;
 			
 			if (score >= bestScore) {
 				bestScore = score;
 				bestMove = i;
+				bestAvgMoves = res.avg_moves;
 			}
 			
 			if (debug) {
@@ -31,6 +36,8 @@ function getBestMove(grid, runs, debug) {
 			errorGrid = grid.clone();
 		} 
 		
+		console.log('Move ' + moveName(bestMove) + ": Extra score - " + bestScore + " Avg number of moves " + bestAvgMoves);			
+		
 		return {move: bestMove, score: bestScore};
 }
 
@@ -40,22 +47,26 @@ function multiRandomRun(grid, move, runs) {
 	var total = 0.0;
 	var min = 1000000;
 	var max = 0;
-
+	var total_moves = 0;
 	
 	for (var i=0 ; i < runs ; i++) {
-		s = randomRun(grid, move);
+		var res = randomRun(grid, move);
+		var s = res.score;
 		if (s == -1) return -1;
 			
 		total += s;
+		total_moves += res.moves;
 		if (s < min) min = s;
 		if (s > max) max = s;
 	}
+	
 	var avg = total / runs;
+	var avg_moves = total_moves / runs;
 
 //	return max;
 //	return min;
-	return avg;
 //	return avg+max;
+	return {score: avg, avg_moves:avg_moves};
 }
 
 function randomRun(grid, move) {	
@@ -68,6 +79,7 @@ function randomRun(grid, move) {
 	score += res.score;
 
 	// run til we can't
+	var moves=1;
 	while (true) {
 		if (!g.movesAvailable()) break;
 		
@@ -76,9 +88,10 @@ function randomRun(grid, move) {
 		
 		score += res.score;
 		g.addRandomTile();
+		moves++;
 	}
 	// grid done.
-	return score;
+	return {score:score, moves:moves};
 }
 
 function moveAndAddRandomTiles(grid, direction) {
