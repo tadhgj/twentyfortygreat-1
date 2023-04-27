@@ -1,3 +1,5 @@
+_forked off from [Ronzil's 2048 AI repo](https://github.com/ronzil/2048-AI)._
+
 # 2048 AI - Using no hard-coded knowledge about the game.
 
 AI for the game [2048](https://github.com/gabrielecirulli/2048).
